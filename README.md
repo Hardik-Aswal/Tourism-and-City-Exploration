@@ -6,3 +6,8 @@
 </div>
 
 
+![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/d97fb149-b5b1-43d9-b3d5-b6049731b4fc)
+![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/dc52864c-fc51-4719-b776-ce194ddc40fd)
+![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/34f50bac-1e01-45c4-a44d-0906efa4f71c)
+
+
