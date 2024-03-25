@@ -15,7 +15,7 @@
 	<meta charset="UTF-8">
 	<!-- Site Title -->
 	<title>City Exploration- Delhi Darshan</title>
-	<link rel="icon" href="rt.jpg" type="image/jpg">
+	<link rel="icon" href="./img/j.jpg" type="image/jpg">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
 		<!--CSS============================================= -->
 		<link rel="stylesheet" href="css/linearicons.css">
@@ -26,6 +26,410 @@
 		<link rel="stylesheet" href="css/animate.min.css">
 		<link rel="stylesheet" href="css/owl.carousel.css">
 		<link rel="stylesheet" href="css/main.css">
+		<style>
+			
+			.container1 {
+				max-width: 500px;
+				margin: 50px auto;
+				padding: 20px;
+				background-color: #fff;
+				border-radius: 8px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+			
+			label {
+				font-weight: bold;
+			}
+			input[type="text"] {
+				width: 100%;
+				padding: 10px;
+				margin-bottom: 15px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				box-sizing: border-box;
+			}
+			button {
+				display: block;
+				width: 100%;
+				padding: 10px;
+				background-color: #007bff;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: #0056b3;
+			}
+			#output {
+				margin-top: 20px;
+				padding: 10px;
+				background-color: #f9f9f9;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+			}
+		</style>
+		</head>
+		<body></body>
+		<script>
+			const { strict } = require("assert");
+		
+		const V = 252;
+		let metro_lst = new Array(V);
+		let metro_no = new Array(V);
+		
+		function minDistance(dist, sptSet) {
+			let min = 1000.0;
+			let min_index;
+		
+			for (let v = 0; v < V; v++) {
+				if (sptSet[v] == false && dist[v] <= min) {
+					min = dist[v];
+					min_index = v;
+				}
+			}
+		
+			return min_index;
+		}
+		
+		function printPath(parent, j, src, cnt) {
+			if (parent[j] == src || parent[j] <= 0) {
+			  let str="";
+				if (parent[j] == src) {
+					cnt.push(metro_no[j]);
+				  str=str+" -->>" + metro_lst[metro_no[j]];
+					//console.log(" -->>" + metro_lst[metro_no[j]]);
+				}
+				return str;
+			}
+		   let str=printPath(parent, parent[j], src, cnt);
+			cnt.push(metro_no[j]);
+		  str=str+" -->> " + metro_lst[metro_no[j]];
+			//console.log(" -->> " + metro_lst[metro_no[j]]);
+		  return str;
+		}
+		
+		function printSolution(dist, src, parent, dest, cnt) {
+			console.log("Distance between two station is: " + dist[dest] + " km ");
+			//metro_fare(dist[dest]);
+		  let str=metro_lst[metro_no[src]];
+			//console.log(metro_lst[metro_no[src]]);
+			cnt.push(metro_no[src]);
+			str=str+printPath(parent, dest, src, cnt);
+			return str;
+		}
+		
+		function dijkstra(graph, src, d, cnt) {
+			let dist = new Array(V).fill(1000.0);
+			let sptSet = new Array(V).fill(false);
+			let parent = new Array(V).fill(-1);
+		
+			dist[src] = 0.0;
+			for (let count = 0; count < V - 1; count++) {
+				let u = minDistance(dist, sptSet);
+				sptSet[u] = true;
+				for (let v = 0; v < V; v++) {
+					if (!sptSet[v] && graph[u][v] && dist[u] + graph[u][v] < dist[v]) {
+						parent[v] = u;
+						dist[v] = dist[u] + graph[u][v];
+					}
+				}
+			}
+			let str=printSolution(dist, src, parent, d, cnt);
+		  return str;
+		}
+		
+		const yellow_line=["Samaypur Badli","Rohini Sector 18,19","Haiderpur Badli Mor","Jahangirpuri","Adarsh Nagar","Azadpur","Model Town","G.T.B. Nagar","Vishwavidyalaya","Vidhan Sabha","Civil Lines","Kashmere Gate","Chandni Chowk","Chawri Bazar","New Delhi","Rajiv Chowk","Patel Chowk","Central Secretariat","Udyog Bhawan","Lok Kalyan Marg","Jorbagh","INA","AIIMS","Green Park","Hauz Khas","Malviya Nagar","Saket","Qutub Minar","Chhatarpur","Sultanpur","Ghitorni","Arjan Garh","Guru Dronacharya","Sikandarpur","MG Road","IFFCO Chowk","Huda City Centre"];
+		const yl=[0.0,0.8,1.3,1.3,1.3,1.5,1.4,1.4,0.8,1.0,1.3,1.1,1.1,1.0,0.8,1.1,1.3,0.9,0.3,1.6,1.2,1.3,0.8,1.0,1.8,1.7,0.9,1.7,1.3,1.6,1.3,1.7,1.5,1.0,1.2,1.1,1.5];
+		
+		const red_line=["Dilshad Garden","Jhil Mil","Mansarovar Park","Shahdara","Welcome","Seelampur","Shastri Park","Kashmiri Gate","Ti Hazari","Pul Bangash","Pratap Nagar","Shastri Nagar","Inder Lok","Kanhaiya Nagar","Keshav Puram","Netaji Subhash Place","Kohat Enclave","Pitam Pura","Rohini East","Rohini West","Rithala"];
+		const rl=[0.0,0.9,1.1,1.1,1.2,1.1,1.6,2.2,1.1,0.9,0.8,1.7,1.2,1.2,0.8,1.2,1.1,1.0,0.8,1.3,1.0];
+		
+		const blue_line=["Dwarka Sector 21","Dwarka Sector 8","Dwarka Sector 9","Dwarka Sector 9","Dwarka Sector 10","Dwarka Sector 11","Dwarka Sector 12","Dwarka Sector 13","Dwarka Sector 14","Dwarka","Dwarka Mor","Nawada","Uttam Nagar West","Uttam Nagar East","Janka Puri West","Janak Puri East","Tilak Nagar","Subhash Nagar","Tagore Garden","Rajouri Garden","Ramesh Nagar","Moti Nagar","Kirti Nagar","Shadipur","Patel Nagar","Rajendra Place","Karol Bagh","Jhandelwalan","R K Ashram Marg","Rajiv Chowk","Barakhamba","Mandi House","Pragati Maidan","Indraprastha","Yamuna Bank","Akshardham","Mayur Vihar Phase-1","Mayur Vihar Extension","New Ashok Nagar","Noida Sector 15","Noida Sector 16","Noida Sector 18","Botanical Garden","Golf Course","Noida City Center","Noida Sector 34","Noida Sector 52","Noida Sector 61","Noida Sector 59","Noida Sector 62","Noida Electronic City"];
+		const bl=[0.0,1.7,1.0,1.1,1.0,1.0,0.9,0.9,1.5,1.1,1.2,1.0,1.0,1.3,1.0,1.0,0.9,0.9,1.1,1.0,1.2,1.0,0.7,1.3,0.9,1.0,1.2,1.0,1.2,0.7,1.0,0.8,0.8,1.8,1.3,1.8,1.2,0.9,1.0,1.1,1.1,1.1,1.2,1.3,0.8,1.3,1.4,1.1,1.0,1.2];
+		
+		const orange_line=["New Delhi","Shivaji Stadium","Dhaula Kuan","Delhi Aero City","IGI Airport","Dwarka Sector 21"];
+		const ol=[0.0,1.9,6.4,6.2,3.4,2.9];
+		
+		const green_line=["Inder Lok","Ashok Park Main","Punjabi Bagh","Shivaji Park","Madi Pur","Paschim Vihar East","Paschim Vihar West","Peera Garhi","Udyog Nagar","Surajmal Stadium","Nangloi","Nangloi Railway Station","Rajdhani Park","Mundka","Mundka Industrial Area","Gheva Metro Station","Tikri Kalan","Tikri Border","Pandit Shree Ram","Bahdurgarh City","Brig Hoshiar Singh"];
+		const gl=[0.0,1.4,0.9,1.6,1.1,0.7,1.0,0.9,1.2,0.7,0.8,0.9,0.2,1.3,1.3,2.1,1.7,1.3,1.3,1.5,1.8];
+		
+		const rapid_line=["Sector 55-66","Sector 54 Chowk","Sector 53-54","Sector 42-43","DLF Phase 1","Sikandarpur","DLF Phase 2","Vodaphone Belvedere Towers","Indus Bank Cyber City","Micromax Moulsari","DLF Phase 3"];
+		const rapl=[0.0,1.1,1.5,1.3,1.6,1.1,0.7,0.7,0.6,0.6,0.8];
+		
+		const voilet_line=["Kashmiri Gate","Lal Quila","Jama Masjid","Delhi Gate","ITO","Mandi House","Janpath","Central Secretariat","Khan Market","Jawaharlal Nehru Stadium","Jangpura","Lajpat Nagar","Moolchand","Kailash Colony","Nehru Place","Kalkaji Mandir","Govind Puri","Okhla","Jasola","Sarita Vihar","Mohan Estate","Tughlakabad","Badarpur","Sarai","NHPC Chowk","Mewala Maharajpur","Sector 28 Faridabad","Badkal Mor","Old Faridabad","Neelam Chowk Ajronda","Bata Chowk","Escorts Mujesar","Sant Surdas-Sihi","Raja Nahar Singh"];
+		const vl=[0.0,1.5,0.8,1.4,1.3,0.8,1.4,1.3,2.1,1.4,0.9,1.5,0.7,1.3,1.0,0.8,0.7,1.1,0.9,1.2,1.2,1.9,1.1,2.5,1.6,0.9,1.2,1.7,1.2,1.6,1.3,1.8,1.7,1.7];
+		
+		const magenta_line=["Janak Puri West","Dabri Mor","Dashrath Puri","Palam","Sadar Bazaar Cantonment","Terminal 1 IGI Airport","Shankar Vihar","Vasant Vihar","Munirka","RK Puram","IIT Delhi","Hauz Khas","Panchsheel Park","Chirag Delhi","Greater Kailash","Nehru Enclave","Kalkaji Mandir","Okhla NHIC","Sukhdev Vihar","Jamia Milia Islamia","Okhla Vihar","Jasola Vihar Shaheen Bagh","Kalindi Kunj","Okhla Bird Sanctuary","Botanical Garden"];
+		const ml=[0.0,2.0,1.1,1.5,2.6,1.7,1.8,2.1,1.2,1.4,0.9,1.2,1.5,0.9,0.9,1.3,0.9,0.8,1.1,1.2,0.5,1.8,1.4,1.6,1.7];
+		
+		const pink_line=["Majlis Park","Azadpur","Shalimar Bagh","Netaji Subhash Place","Shakurpur","Punjabi Bagh West","ESI Hospital","Rajouri Garden","Maya Puri","Naraina Vihar","Delhi Cantt","Durgabai Deshmukh South Campus","Sir Vishweshwaraiah Moti Bagh","Bhikaji Cama Place","Sarojini Nagar","INA","South Extension","Lajpat Nagar","Vinobapuri","Ashram","Hazrat Nizamuddin","Mayur Vihar Phase-1","Mayur Vihar Pocket I","Trilokpuri Sanjay Lake","Vinod Nagar East","Mandawali - West Vinod Nagar","IP Extension","Anand Vihar","Karkar Duma","Karkarduma Court","Krishna Nagar","East Azad Nagar","Welcome","Jaffrabad","Maujpur","Gokulpuri","Johri Enclave","Shiv Vihar"];
+		const pl=[0.0,2.1,1.6,1.4,1.2,1.4,2.5,1.1,1.5,1.5,1.8,3.6,1.3,1.6,1.2,1.1,1.2,1.6,1.4,1.2,1.9,3.6,0.8,1.3,0.8,0.6,1.0,1.6,1.0,1.1,0.7,1.0,1.1,1.2,1.1,1.3,1.3,0.9];
+		
+		const blue_line2=["Yamuna Bank","Laxmi Nagar","Nirman Vihar","Preet Vihar","Karkar Duma","Anand Vihar","Kaushambi","Vaishali"];
+		const bl2=[0.0,1.3,1.1,1.0,1.2,1.1,0.8,1.6];
+		
+		const green_line2=["Ashok Park Main","Satguru Ram Singh Marg","Kirti Nagar"];
+		const gl2=[0.0,1.1,1.0];
+		
+		const aqua_line=["Noida Sector 52","Noida Sector 51","Noida Sector 50","Noida Sector 76","Noida Sector 101","Noida Sector 81","NSEZ Noida","Noida Sector 83","Noida Sector 137","Noida Sector 142","Noida Sector 143","Noida Sector 144","Noida Sector 145","Noida Sector 146","Noida Sector 147","Noida Sector 148","Knowledge Park II","Pari Chowk Greater Noida","Alpha 1 Greater Noida","Delta 1 Greater Noida","GNIDA Office","Depot Greater Noida"];
+		const al=[0.0,0.3,1.3,1.0,1.1,0.9,2.0,1.1,1.5,1.6,1.0,1.4,1.2,1.7,1.5,1.6,1.5,1.1,0.9,1.5,1.3,0.9];
+		
+		
+		// Main logic starts here
+		let metro = new Map();
+		let graph = Array.from({ length: V }, () => Array(V).fill(0));
+		let count = 0;
+		let station_index=new Map();
+		
+		// Iterate over yellow line
+		for (let i = 0; i < 37; i++) {
+			if (!metro.has(yellow_line[i])) {
+				metro.set(yellow_line[i], count);
+				station_index[yellow_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over red line
+		for (let i = 0; i < 21; i++) {
+			if (!metro.has(red_line[i])) {
+				metro.set(red_line[i], count);
+				station_index[red_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over blue line
+		for (let i = 0; i < 51; i++) {
+			if (!metro.has(blue_line[i])) {
+				metro.set(blue_line[i], count);
+				station_index[blue_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Replicate the same for other lines...
+		// Iterate over orange line
+		for (let i = 0; i < 6; i++) {
+			if (!metro.has(orange_line[i])) {
+				metro.set(orange_line[i], count);
+				station_index[orange_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over green line
+		for (let i = 0; i < 21; i++) {
+			if (!metro.has(green_line[i])) {
+				metro.set(green_line[i], count);
+				station_index[green_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over rapid line
+		for (let i = 0; i < 11; i++) {
+			if (!metro.has(rapid_line[i])) {
+				metro.set(rapid_line[i], count);
+				station_index[rapid_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over violet line
+		for (let i = 0; i < 34; i++) {
+			if (!metro.has(voilet_line[i])) {
+				metro.set(voilet_line[i], count);
+				station_index[voilet_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over magenta line
+		for (let i = 0; i < 25; i++) {
+			if (!metro.has(magenta_line[i])) {
+				metro.set(magenta_line[i], count);
+				station_index[magenta_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over pink line
+		for (let i = 0; i < 38; i++) {
+			if (!metro.has(pink_line[i])) {
+				metro.set(pink_line[i], count);
+				station_index[pink_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over blue line 2
+		for (let i = 0; i < 8; i++) {
+			if (!metro.has(blue_line2[i])) {
+				metro.set(blue_line2[i], count);
+				station_index[blue_line2[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over green line 2
+		for (let i = 0; i < 3; i++) {
+			if (!metro.has(green_line2[i])) {
+				metro.set(green_line2[i], count);
+				station_index[green_line2[i]]=count
+				count++;
+			}
+		}
+		
+		// Iterate over aqua line
+		for (let i = 0; i < 22; i++) {
+			if (!metro.has(aqua_line[i])) {
+				metro.set(aqua_line[i], count);
+				station_index[aqua_line[i]]=count
+				count++;
+			}
+		}
+		
+		// Initialize graph based on line information
+		
+		// Yellow line
+		for (let i = 0; i < 36; i++) {
+			let m = metro.get(yellow_line[i]);
+			let n = metro.get(yellow_line[i + 1]);
+			graph[m][n] = yl[i + 1];
+			graph[n][m] = yl[i + 1];
+		}
+		
+		// Red line
+		for (let i = 0; i < 20; i++) {
+			let m = metro.get(red_line[i]);
+			let n = metro.get(red_line[i + 1]);
+			graph[m][n] = rl[i + 1];
+			graph[n][m] = rl[i + 1];
+		}
+		
+		// Blue line
+		for (let i = 0; i < 50; i++) {
+			let m = metro.get(blue_line[i]);
+			let n = metro.get(blue_line[i + 1]);
+			graph[m][n] = bl[i + 1];
+			graph[n][m] = bl[i + 1];
+		}
+		
+		// Orange line
+		for (let i = 0; i < 5; i++) {
+			let m = metro.get(orange_line[i]);
+			let n = metro.get(orange_line[i + 1]);
+			graph[m][n] = ol[i + 1];
+			graph[n][m] = ol[i + 1];
+		}
+		
+		// Green line
+		for (let i = 0; i < 20; i++) {
+			let m = metro.get(green_line[i]);
+			let n = metro.get(green_line[i + 1]);
+			graph[m][n] = gl[i + 1];
+			graph[n][m] = gl[i + 1];
+		}
+		
+		// Rapid line
+		for (let i = 0; i < 10; i++) {
+			let m = metro.get(rapid_line[i]);
+			let n = metro.get(rapid_line[i + 1]);
+			graph[m][n] = rapl[i + 1];
+			graph[n][m] = rapl[i + 1];
+		}
+		
+		// Voilet line
+		for (let i = 0; i < 33; i++) {
+			let m = metro.get(voilet_line[i]);
+			let n = metro.get(voilet_line[i + 1]);
+			graph[m][n] = vl[i + 1];
+			graph[n][m] = vl[i + 1];
+		}
+		
+		// Magenta line
+		for (let i = 0; i < 24; i++) {
+			let m = metro.get(magenta_line[i]);
+			let n = metro.get(magenta_line[i + 1]);
+			graph[m][n] = ml[i + 1];
+			graph[n][m] = ml[i + 1];
+		}
+		
+		// Pink line
+		for (let i = 0; i < 37; i++) {
+			let m = metro.get(pink_line[i]);
+			let n = metro.get(pink_line[i + 1]);
+			graph[m][n] = pl[i + 1];
+			graph[n][m] = pl[i + 1];
+		}
+		
+		// Blue line 2
+		for (let i = 0; i < 7; i++) {
+			let m = metro.get(blue_line2[i]);
+			let n = metro.get(blue_line2[i + 1]);
+			graph[m][n] = bl2[i + 1];
+			graph[n][m] = bl2[i + 1];
+		}
+		
+		// Green line 2
+		for (let i = 0; i < 2; i++) {
+			let m = metro.get(green_line2[i]);
+			let n = metro.get(green_line2[i + 1]);
+			graph[m][n] = gl2[i + 1];
+			graph[n][m] = gl2[i + 1];
+		}
+		
+		// Aqua line
+		for (let i = 0; i < 21; i++) {
+			let m = metro.get(aqua_line[i]);
+			let n = metro.get(aqua_line[i + 1]);
+			graph[m][n] = al[i + 1];
+			graph[n][m] = al[i + 1];
+		}
+		
+		
+		// Replicate the same for other lines...
+		
+		let k = 0;
+		// let metro_lst = [];
+		// let metro_no = {};
+		
+		for (let [station, index] of metro) {
+			metro_lst[k] = station;
+			metro_no[index] = k;
+			k++;
+		}
+		
+		
+		// let ans=dijkstra(graph,src,dst,cnt);
+		// console.log(ans)
+		
+		function change() {
+		
+			
+			let input1 = document.getElementById("input1").value; // Retrieve the value entered in input1
+			let input2 = document.getElementById("input2").value; // Retrieve the value entered in input2
+		
+			let src = station_index.get(input1); // Get the index of the source station
+			let dst = station_index.get(input2); // Get the index of the destination station
+		
+			if (typeof src === 'undefined') {
+				console.log("Source station not found.");
+				return;
+			}
+		
+			if (typeof dst === 'undefined') {
+				console.log("Destination station not found.");
+				return;
+			}
+		
+			let cnt = [];
+			let ans = dijkstra(graph, src, dst, cnt); // Call dijkstra function with station indices
+			document.getElementById("output").innerText = ans;
+		}
+		</script>
 	</head>
 	<body>
 		<div class="protfolio-wrap">
@@ -88,10 +492,8 @@
 					  <div class="item">
 						<img src="img2/p1.jpg" alt="Work 1">
 						<div class="p-inner">
-						  <h4><a href="https://en.wikipedia.org/wiki/Swaminarayan_Akshardham_(Delhi)">Swaminarayan Akshardham Temple</a></h4>
+						  <h4><a href="./Pages-inside/GoldenTemple-Info.html">Swaminarayan Akshardham Temple</a></h4>
 						  <div class="cat">East Delhi</div>
-							<h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						</div>
 					  </div>
 					</div>
@@ -100,10 +502,8 @@
 					  <div class="item">
 						<img src="img2/p2.jpg" alt="Work 1">
 						<div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Qutb_Minar">Qutub Minar</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Qutub Minar</a></h4>
 						  <div class="cat">South Delhi</div>
-							<h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						</div>
 					  </div>
 					</div>
@@ -112,10 +512,8 @@
 					  <div class="item">
 						<img src="img2/p3.jpg" alt="Work 1">
 						<div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Mehrauli_Archaeological_Park">Mehrauli Archaeological Park</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Mehrauli Archaeological Park</a></h4>
 						  <div class="cat">South Delhi</div>
-							<h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						</div>
 					  </div>
 					  
@@ -125,10 +523,8 @@
 					  <div class="item">
 						<img src="img2/p4.jpg" alt="Work 1">
 						<div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Adventure_Island_(amusement_park)">Adventure Island</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Adventure Island</a></h4>
 						  <div class="cat">North Delhi</div>
-							<h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						</div>
 					  </div>
 					</div>
@@ -136,10 +532,8 @@
 						<div class="item">
 						  <img src="img2/p5.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Splish_Splash_(water_park)">Splash Water Park</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Splash Water Park</a></h4>
 							<div class="cat">North Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -148,10 +542,8 @@
 						<div class="item">
 						  <img src="img2/p6.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Rock_garden">Rock Garden</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Rock Garden</a></h4>
 							<div class="cat">West Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -160,10 +552,8 @@
 						<div class="item">
 						  <img src="img2/p7.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Dilli_Haat">Dilli Haat Janakpuri</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Dilli Haat Janakpuri</a></h4>
 							<div class="cat">West Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -172,10 +562,8 @@
 						<div class="item">
 						  <img src="img2/p8.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/India_Gate">India Gate</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">India Gate</a></h4>
 							<div class="cat">Central Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -183,10 +571,8 @@
 						<div class="item">
 						  <img src="img2/p9.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Raj_Ghat_and_associated_memorials">Raj Ghat</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Raj Ghat</a></h4>
 							<div class="cat">Central Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -194,10 +580,8 @@
 						<div class="item">
 						  <img src="img2/p10.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Lotus_Temple">Lotus Temple</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Lotus Temple</a></h4>
 							<div class="cat">Central Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -206,10 +590,8 @@
 						<div class="item">
 						  <img src="img2/p11.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Red_Fort">Red Fort</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Red Fort</a></h4>
 							<div class="cat">Old Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -217,10 +599,8 @@
 						<div class="item">
 						  <img src="img2/p12.jpg" alt="Work 1">
 						  <div class="p-inner">
-							<h4><a href="https://en.wikipedia.org/wiki/Jama_Masjid,_Delhi">Jama Masjid</a></h4>
+							<h4><a href="./Pages-inside/GoldenTemple-Info.html">Jama Masjid</a></h4>
 							<div class="cat">Old Delhi</div>
-							  <h5><a href="https://www.tripadvisor.com/Attractions-g304551-Activities-c42-New_Delhi_National_Capital_Territory_of_Delhi.html">Guided-Tours</a></h5>
-							
 						  </div>
 						</div>
 					  </div>
@@ -235,7 +615,68 @@
 			<!-- End portfolio-area Area -->	
 
 			
+			<!-- Start service Area -->
+<!-- 			<section class="service-area section-gap relative" id="service">
+				<div class="overlay overlay-bg"></div>	
+				<div class="container">
+					<div class="row d-flex justify-content-center">
+						<div class="menu-content pb-60 col-lg-10">
+							<div class="title text-center">
+								<h1 class="mb-10 text-white">Always in our customer Favour</h1>
+								<p>Who are always with tight Budget</p>
+							</div>
+						</div>
+					</div>	
+				</div>	
+			</section> -->
+			<!-- End service Area -->
+			
+			<!-- Start services Area -->
+<!-- 			<section class="services-area pb-100" >
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="single-service">
+								<img class="img-fluid" src="img/s1.png" alt="">
+								<h4>Ammenties Selection</h4>
+								<p>
+									It's totaly on you what you want and what you want to let it go on Hotel Selection process.
+								</p>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="single-service">
+								<img class="img-fluid" src="img/s2.png" alt="">
+								<h4>Visa Ready</h4>
+								<p>
+									Just 32 Hours - What it takes get your Visa Ready and other documentation necessary for travel.
+								</p>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="single-service">
+								<img class="img-fluid" src="img/s3.png" alt="">
+								<h4>Personalized Travel Plans</h4>
+								<p>
+									We have wide Varieties of Hotel &amp; Resorts to accomodate you. 3D4N or 15D16N totally upto you.
+								</p>
+							</div>
+						</div>														
+					</div>
+				</div>	
+			</section> -->
+			<!-- End services Area -->
+			
 			<!-- Start review Area -->
+			<div class="container1">
+				<h2>Input to JavaScript Array</h2>
+				<label for="input1"> starting location:</label>
+				<input type="text" id="input1" placeholder="Enter starting location">
+				<label for="input2">destination location :</label>
+				<input type="text" id="input2" placeholder="Enter destination location ">
+				<button onclick="getInputAndReturnArray()">Submit</button>
+				<div id="output"></div>
+			</div>
 			<section class="review-area section-gap" id="testimonial">
 				<div class="container">
 					<div class="row d-flex justify-content-center">
@@ -249,7 +690,7 @@
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="single-review">
-								
+								<img src="img/c1.png" alt="">
 								<div class="title d-flex flex-row">
 									<a href="#"><h4>Amit-Shinde</h4></a>									
 									<div class="star">
@@ -261,11 +702,11 @@
 									</div>
 								</div>
 								<p>
-									XDXDXD :)
+									It was a life Experience to visit such a beautiful city.
 								</p>
 							</div>	
 							<div class="single-review">
-								
+								<img src="img/c3.png" alt="">
 								<div class="title d-flex flex-row">
 									<a href="#"><h4>Hardik Aswal</h4></a>									
 									<div class="star">
@@ -277,13 +718,13 @@
 									</div>
 								</div>
 								<p>
-									Fabulous
+									Just one Word - Yash Ke Papa!
 								</p>
 							</div>															
 						</div>
 						<div class="col-lg-6">
 							<div class="single-review">
-								
+								<img src="img/c2.png" alt="">
 								<div class="title d-flex flex-row">
 									<a href="#"><h4>Akshat Yadav</h4></a>									
 									<div class="star">
@@ -295,11 +736,11 @@
 									</div>
 								</div>
 								<p>
-									Qutub Minar was my favorite
+									Qutub Minar ke top floor pe yash ki biwi chodunga
 								</p>
 							</div>	
 							<div class="single-review">
-								
+								<img src="img/c4.png" alt="">
 								<div class="title d-flex flex-row">
 									<a href="#"><h4>Yash Bhadauria</h4></a>									
 									<div class="star">
@@ -311,7 +752,7 @@
 									</div>
 								</div>
 								<p>
-									Nice People
+									Now, I am big fan of Kejriwal. Thanks for such a gift to this world.
 								</p>
 							</div>															
 						</div>							
@@ -321,12 +762,57 @@
 			<!-- End review Area -->
 			
 
-								
+			<!-- start footer Area -->		
+			<!-- <footer class="footer-area section-gap">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-5 col-md-6 col-sm-6">
+							<div class="single-footer-widget">
+								<h6>About Us</h6>
+								<p>
+									We Provide Tour Plans for your most comfortable travel ever. Let yourself dive into the Beauty, Culture &amp; festivals of India. Have You're Good time at India.
+								</p>
+								<p class="footer-text">
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This Website is created with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="h" target="_blank">Jatin Chauhan</a>
+							</p>	
+							</div>
+						</div>
+						<div class="col-lg-5  col-md-6 col-sm-6">
+							<div class="single-footer-widget">
+								<h6>Newsletter</h6>
+								<p>Stay update with our latest</p>
+								<div class="" id="mc_embed_signup">
+								 <form target="_blank"  action="" method="get" class="form-inline">
+										<input class="form-control" name="EMAIL" placeholder="Enter Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Your Email Here '" required="" type="email">
+											<button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+									   
+										<div class="info"></div>
+									</form>
+								</div>
+							</div>
+						</div>						
+						<div class="col-lg-2 col-md-6 col-sm-6 social-widget">
+							<div class="single-footer-widget">
+								<h6>Follow Us</h6>
+								<p>Let us be social</p>
+								<div class="footer-social d-flex align-items-center">
+									<a href="#"><i class="fa fa-facebook"></i></a>
+									<a href="#"><i class="fa fa-twitter"></i></a>
+									<a href="#"><i class="fa fa-snapchat"></i></a>
+									<a href="#"><i class="fa fa-instagram"></i></a>
+								</div>
+							</div>
+						</div>							
+					</div>
+				</div>
+			</footer>	 -->
+			<!-- End footer Area					 -->
 		</div>
+		
 		<script src="js/vendor/jquery-2.2.4.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="js/vendor/bootstrap.min.js"></script>			
-		  <script src="js/easing.min.js"></script>			
+		<script src="js/easing.min.js"></script>			
 		<script src="js/jquery.ajaxchimp.min.js"></script>
 		<script src="js/jquery.magnific-popup.min.js"></script>	
 		<script src="js/owl.carousel.min.js"></script>			
