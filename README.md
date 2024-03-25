@@ -9,7 +9,9 @@
 ![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/d97fb149-b5b1-43d9-b3d5-b6049731b4fc)
 ![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/dc52864c-fc51-4719-b776-ce194ddc40fd)
 ![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/34f50bac-1e01-45c4-a44d-0906efa4f71c)
-![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/0e84fdbe-ed83-442f-a705-78df9c248b9b)
+![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/02abf9e8-845c-4198-8294-b2c078054d9c)
+![image](https://github.com/Hardik-Aswal/Tourism-and-City-Exploration/assets/137987162/4fccda29-c446-42c8-a209-d738aad0a846)
+
 
 
 
